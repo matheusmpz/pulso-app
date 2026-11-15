@@ -1,0 +1,15 @@
+# Somente o front-end. A API e o banco sobem pelo compose do pulso-api.
+services:
+  pulso-app:
+    build: .
+    image: pulso-app:latest
+    container_name: pulso-app
+    # Porta 3000: é a origem que a API aceita por padrão (CORS_ORIGINS)
+    ports:
+      - '3000:80'
+    environment:
+      # URL da API como o NAVEGADOR enxerga (não o container)
+      API_URL: ${API_URL:-http://localhost:8080}
+      # Opcional: por padrão é derivada da API_URL (http → ws) + /ws
+      WS_URL: ${WS_URL:-}
+    restart: unless-stopped
