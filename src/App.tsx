@@ -1,12 +1,21 @@
-import { Logo } from '@/components/layout/Logo'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { RouterProvider } from 'react-router'
+
 import { TemaProvider } from '@/components/layout/TemaProvider'
+import { Toaster } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
+import { queryClient } from '@/lib/query'
+import { roteador } from '@/rotas'
 
 export default function App() {
   return (
     <TemaProvider>
-      <main className="flex min-h-svh items-center justify-center">
-        <Logo />
-      </main>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider delayDuration={200}>
+          <RouterProvider router={roteador} />
+          <Toaster position="top-right" richColors closeButton />
+        </TooltipProvider>
+      </QueryClientProvider>
     </TemaProvider>
   )
 }
