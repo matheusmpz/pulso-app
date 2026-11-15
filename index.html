@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Pulso Dashboard: projetos, vendas e consumo de IA em tempo real." />
+    <title>Pulso Dashboard</title>
+    <script>
+      // Aplica o tema antes do React carregar, para evitar a "piscada" de tema claro.
+      ;(function () {
+        var tema = 'sistema'
+        try {
+          tema = localStorage.getItem('pulso-tema') || 'sistema'
+        } catch (e) {}
+        var escuro =
+          tema === 'escuro' || (tema === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        if (escuro) document.documentElement.classList.add('dark')
+      })()
+    </script>
+    <script src="/config.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

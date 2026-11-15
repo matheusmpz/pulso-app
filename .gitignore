@@ -1,0 +1,27 @@
+CLAUDE.md
+DESIGN_SYSTEM.md
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependências e build
+node_modules
+dist
+dist-ssr
+coverage
+*.local
+
+# Ambiente
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.sw?

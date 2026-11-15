@@ -1,0 +1,239 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* O tema escuro é aplicado pela classe .dark no <html> (ver index.html e TemaProvider). */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Cor do dashboard (seção 5 do design system) */
+  --color-dash: var(--dash);
+  --color-ref: var(--ref);
+}
+
+/* ---------- Tokens base (seção 4) ---------- */
+:root {
+  --radius: 0.75rem;
+  --background: var(--color-zinc-50);
+  --foreground: var(--color-zinc-950);
+  --card: var(--color-white);
+  --card-foreground: var(--color-zinc-950);
+  --popover: var(--color-white);
+  --popover-foreground: var(--color-zinc-950);
+  --primary: var(--color-yellow-400); /* marca */
+  --primary-foreground: var(--color-zinc-950); /* texto SEMPRE escuro sobre a marca */
+  --secondary: var(--color-zinc-100);
+  --secondary-foreground: var(--color-zinc-900);
+  --muted: var(--color-zinc-100);
+  --muted-foreground: var(--color-zinc-500);
+  --accent: var(--color-zinc-100); /* superfície de hover do shadcn, NÃO é a cor do dashboard */
+  --accent-foreground: var(--color-zinc-900);
+  --destructive: var(--color-red-600);
+  --border: var(--color-zinc-200);
+  --input: var(--color-zinc-200);
+  --ring: var(--color-yellow-700);
+
+  /* Referência neutra e cor de dashboard padrão (fora de um data-cor) */
+  --ref: var(--color-zinc-500);
+  --dash: var(--color-zinc-700);
+  --dash-1: var(--color-zinc-400);
+  --dash-2: var(--color-zinc-500);
+  --dash-3: var(--color-zinc-700);
+  --dash-4: var(--color-zinc-900);
+
+  /* Os gráficos usam a rampa do dashboard; --chart-* existe para compatibilidade com o shadcn */
+  --chart-1: var(--dash-1);
+  --chart-2: var(--dash-2);
+  --chart-3: var(--dash-3);
+  --chart-4: var(--dash-4);
+  --chart-5: var(--ref);
+
+  /* Cores de estado (donuts com significado fixo) */
+  --estado-concluida: var(--color-emerald-600);
+  --estado-andamento: var(--color-sky-600);
+  --estado-revisao: var(--color-amber-600);
+  --estado-aberta: var(--color-zinc-500);
+  --estado-recusada: var(--color-red-600);
+
+  /* Fatias além da rampa do dashboard (5ª em diante) */
+  --extra-1: var(--color-zinc-400);
+  --extra-2: var(--color-zinc-500);
+  --extra-3: var(--color-zinc-600);
+}
+
+.dark {
+  --background: var(--color-zinc-950);
+  --foreground: var(--color-zinc-50);
+  --card: var(--color-zinc-900);
+  --card-foreground: var(--color-zinc-50);
+  --popover: var(--color-zinc-900);
+  --popover-foreground: var(--color-zinc-50);
+  --primary: var(--color-yellow-400);
+  --primary-foreground: var(--color-zinc-950);
+  --secondary: var(--color-zinc-800);
+  --secondary-foreground: var(--color-zinc-50);
+  --muted: var(--color-zinc-800);
+  --muted-foreground: var(--color-zinc-400);
+  --accent: var(--color-zinc-800);
+  --accent-foreground: var(--color-zinc-50);
+  --destructive: var(--color-red-500);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--color-yellow-400);
+
+  --ref: var(--color-zinc-400);
+  --dash: var(--color-zinc-300);
+  --dash-1: var(--color-zinc-200);
+  --dash-2: var(--color-zinc-300);
+  --dash-3: var(--color-zinc-400);
+  --dash-4: var(--color-zinc-500);
+
+  --estado-concluida: var(--color-emerald-400);
+  --estado-andamento: var(--color-sky-400);
+  --estado-revisao: var(--color-amber-400);
+  --estado-aberta: var(--color-zinc-400);
+  --estado-recusada: var(--color-red-400);
+
+  --extra-1: var(--color-zinc-400);
+  --extra-2: var(--color-zinc-500);
+  --extra-3: var(--color-zinc-600);
+}
+
+/* ---------- Cor por dashboard (seção 5) ----------
+   Para uma cor nova: acrescente um bloco claro + escuro e inclua a cor em CORES_VALIDAS (lib/cores.ts). */
+
+/* Vendas */
+[data-cor='emerald'] {
+  --dash: var(--color-emerald-600);
+  --dash-1: var(--color-emerald-500);
+  --dash-2: var(--color-emerald-600);
+  --dash-3: var(--color-emerald-700);
+  --dash-4: var(--color-emerald-800);
+}
+.dark [data-cor='emerald'] {
+  --dash: var(--color-emerald-400);
+  --dash-1: var(--color-emerald-300);
+  --dash-2: var(--color-emerald-400);
+  --dash-3: var(--color-emerald-500);
+  --dash-4: var(--color-emerald-600);
+}
+
+/* Projetos */
+[data-cor='violet'] {
+  --dash: var(--color-violet-600);
+  --dash-1: var(--color-violet-400);
+  --dash-2: var(--color-violet-500);
+  --dash-3: var(--color-violet-700);
+  --dash-4: var(--color-violet-900);
+}
+.dark [data-cor='violet'] {
+  --dash: var(--color-violet-400);
+  --dash-1: var(--color-violet-300);
+  --dash-2: var(--color-violet-400);
+  --dash-3: var(--color-violet-500);
+  --dash-4: var(--color-violet-600);
+}
+
+/* IA */
+[data-cor='orange'] {
+  --dash: var(--color-orange-600);
+  --dash-1: var(--color-orange-400);
+  --dash-2: var(--color-orange-600);
+  --dash-3: var(--color-orange-700);
+  --dash-4: var(--color-orange-900);
+}
+.dark [data-cor='orange'] {
+  --dash: var(--color-orange-400);
+  --dash-1: var(--color-orange-300);
+  --dash-2: var(--color-orange-400);
+  --dash-3: var(--color-orange-600);
+  --dash-4: var(--color-orange-700);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+}
+
+/* ---------- Animações ---------- */
+
+/* Realce do card quando chega uma atualização em tempo real (~600 ms) */
+@keyframes realce-card {
+  0% {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--dash) 60%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 1px transparent;
+  }
+}
+.realce-card {
+  animation: realce-card 600ms ease-out;
+}
+
+/* Ponto pulsante do indicador "Ao vivo" */
+@keyframes pulso-ponto {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.pulso-ponto {
+  animation: pulso-ponto 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .realce-card {
+    animation: none;
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--dash) 60%, transparent);
+  }
+  .pulso-ponto {
+    animation: none;
+    display: none;
+  }
+}
