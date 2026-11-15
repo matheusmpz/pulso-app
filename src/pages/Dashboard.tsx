@@ -1,7 +1,8 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { RotateCcw, TriangleAlert } from 'lucide-react'
 import { useParams } from 'react-router'
 
+import { BarraFiltros } from '@/components/filtros/BarraFiltros'
 import { GradeCards } from '@/components/dashboard/GradeCards'
 import { EstadoPagina } from '@/components/layout/EstadoPagina'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -11,9 +12,10 @@ import { useAtualizarCard } from '@/hooks/useAtualizarCard'
 import { useDashboard, useDashboardDados } from '@/hooks/useDashboard'
 import { useDashboards } from '@/hooks/useDashboards'
 import { useFiltros } from '@/hooks/useFiltros'
+import { useOpcoesFiltros } from '@/hooks/useOpcoesFiltros'
 import { ehApiError } from '@/lib/api'
 import { corDoDashboard } from '@/lib/cores'
-import { intervalo } from '@/lib/formatadores'
+import { sprintPadrao } from '@/lib/periodos'
 import type { RespostaDadosDashboard } from '@/types/api'
 
 export default function Dashboard() {
@@ -23,7 +25,8 @@ export default function Dashboard() {
 }
 
 function PaginaDashboard({ chave }: { chave: string }) {
-  const { filtros } = useFiltros(chave)
+  const { filtros, alterar, limpar, definir } = useFiltros(chave)
+  const { data: opcoes } = useOpcoesFiltros()
   const meta = useDashboard(chave)
   const { data: dashboards } = useDashboards()
 
@@ -31,6 +34,13 @@ function PaginaDashboard({ chave }: { chave: string }) {
   const filtrosProntos = !(filtros.escopo === 'sprint' && !filtros.id)
   const dados = useDashboardDados(chave, filtros, meta.isSuccess && filtrosProntos)
   const { atualizar, pendentes } = useAtualizarCard(chave, filtros)
+
+  // URL com escopo=sprint sem id (link antigo ou digitado): pré-seleciona a sprint atual.
+  useEffect(() => {
+    if (filtrosProntos || !opcoes) return
+    const sprint = sprintPadrao(opcoes.sprints)
+    if (sprint) definir({ ...filtros, id: sprint.id }, { substituir: true })
+  }, [filtrosProntos, opcoes, filtros, definir])
 
   // Último resultado bom: continua na tela se um filtro inválido devolver 400.
   const [ultimoBom, setUltimoBom] = useState<RespostaDadosDashboard | undefined>(undefined)
@@ -98,14 +108,12 @@ function PaginaDashboard({ chave }: { chave: string }) {
             </>
           )}
         </div>
-        <SlotCabecalho>
-          {aplicados && (
-            <span className="text-sm text-muted-foreground tabular-nums">
-              Período: {intervalo(aplicados.de, aplicados.ate)}
-            </span>
-          )}
-        </SlotCabecalho>
+        <SlotCabecalho>{null}</SlotCabecalho>
       </div>
+
+      <BarraFiltros chave={chave} filtros={filtros} aplicados={aplicados} aoAlterar={alterar} aoLimpar={limpar} />
+
+      <div className="h-4" />
 
       {erroFiltro && (
         <Alert variant="destructive" className="mb-4">
@@ -137,6 +145,7 @@ function PaginaDashboard({ chave }: { chave: string }) {
           recarregando={dados.isPlaceholderData && dados.isFetching}
           pendentes={pendentes}
           aoTentarNovamente={atualizar}
+          mensagemSemResultado={erroFiltro ? 'Corrija os filtros para ver os dados.' : undefined}
         />
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -13,6 +13,7 @@ interface GradeCardsProps {
   aoTentarNovamente: (codigo: string) => void
   /** Códigos realçados por atualização em tempo real */
   realces?: ReadonlySet<string>
+  mensagemSemResultado?: string
 }
 
 /** Grade de 12 colunas: cada linha soma 12 (ver lib/layout-cards.ts). */
@@ -24,6 +25,7 @@ export function GradeCards({
   pendentes,
   aoTentarNovamente,
   realces,
+  mensagemSemResultado,
 }: GradeCardsProps) {
   const celulas = useMemo(() => montarLinhas(metas).flat(), [metas])
   const porCodigo = useMemo(() => new Map(resultados?.map((r) => [r.codigo, r])), [resultados])
@@ -40,6 +42,7 @@ export function GradeCards({
             tentando={pendentes.has(card.codigo)}
             aoTentarNovamente={aoTentarNovamente}
             realce={realces?.has(card.codigo)}
+            mensagemSemResultado={mensagemSemResultado}
           />
         </div>
       ))}
