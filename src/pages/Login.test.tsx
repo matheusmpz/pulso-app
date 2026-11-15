@@ -9,7 +9,14 @@ import { ApiError } from '@/lib/api'
 import Login from '@/pages/Login'
 
 function renderizar(entrar: AuthContexto['entrar']) {
-  const auth: AuthContexto = { token: null, usuario: null, carregandoUsuario: false, entrar, sair: vi.fn() }
+  const auth: AuthContexto = {
+    token: null,
+    usuario: null,
+    carregandoUsuario: false,
+    entrar,
+    sair: vi.fn(),
+    expirarSessao: vi.fn(),
+  }
   return render(
     <TemaProvider>
       <ContextoAuth.Provider value={auth}>
