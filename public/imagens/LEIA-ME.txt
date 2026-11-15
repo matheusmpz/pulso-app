@@ -1,0 +1,2 @@
+Coloque aqui a imagem do login com o nome: login.jpg
+O caminho é definido em src/components/login/PainelImagem.tsx (IMAGEM_LOGIN).
