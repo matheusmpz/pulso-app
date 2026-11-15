@@ -11,6 +11,8 @@ export default defineConfig({
   },
   server: { port: 3000, strictPort: true },
   preview: { port: 3000, strictPort: true },
+  // O Recharts já fica no chunk da tela de dashboard (React.lazy); ~200 KB gzip por chunk é aceitável aqui.
+  build: { chunkSizeWarningLimit: 800 },
   test: {
     environment: 'jsdom',
     globals: true,
