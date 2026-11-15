@@ -23,6 +23,8 @@ export interface CardShellProps {
   realce?: boolean
   tentando?: boolean
   aoTentarNovamente?: (codigo: string) => void
+  /** Mensagem quando não há resultado (ex.: filtro inválido) */
+  mensagemSemResultado?: string
   className?: string
 }
 
@@ -34,6 +36,7 @@ function CardShellBase({
   realce,
   tentando,
   aoTentarNovamente,
+  mensagemSemResultado,
   className,
 }: CardShellProps) {
   const titulo = resultado?.titulo || meta.titulo
@@ -86,6 +89,7 @@ function CardShellBase({
           carregando={carregando}
           tentando={tentando}
           aoTentarNovamente={aoTentarNovamente}
+          mensagemSemResultado={mensagemSemResultado}
         />
       </div>
     </Card>
@@ -98,9 +102,13 @@ function ConteudoCard({
   carregando,
   tentando,
   aoTentarNovamente,
-}: Pick<CardShellProps, 'meta' | 'resultado' | 'carregando' | 'tentando' | 'aoTentarNovamente'>) {
+  mensagemSemResultado,
+}: Pick<
+  CardShellProps,
+  'meta' | 'resultado' | 'carregando' | 'tentando' | 'aoTentarNovamente' | 'mensagemSemResultado'
+>) {
   if (!resultado) {
-    return carregando ? <CardSkeleton tipo={meta.tipo} /> : <CardVazio />
+    return carregando ? <CardSkeleton tipo={meta.tipo} /> : <CardVazio mensagem={mensagemSemResultado} />
   }
   if (resultado.erro || resultado.dados === undefined) {
     return (
