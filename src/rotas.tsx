@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router'
 import { LayoutApp } from '@/components/layout/LayoutApp'
 import { Raiz } from '@/components/layout/Raiz'
 import { RotaProtegida, RotaPublica } from '@/components/layout/RotaProtegida'
+import DashboardLazy from '@/pages/DashboardLazy'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import NaoEncontrado from '@/pages/NaoEncontrado'
@@ -20,7 +21,10 @@ export const roteador = createBrowserRouter([
         children: [
           {
             element: <LayoutApp />,
-            children: [{ path: '/', element: <Home /> }],
+            children: [
+              { path: '/', element: <Home /> },
+              { path: '/dashboards/:chave', element: <DashboardLazy /> },
+            ],
           },
         ],
       },
