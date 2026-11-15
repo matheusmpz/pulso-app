@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 
+import { LayoutApp } from '@/components/layout/LayoutApp'
 import { Raiz } from '@/components/layout/Raiz'
 import { RotaProtegida, RotaPublica } from '@/components/layout/RotaProtegida'
 import Home from '@/pages/Home'
@@ -16,7 +17,12 @@ export const roteador = createBrowserRouter([
       },
       {
         element: <RotaProtegida />,
-        children: [{ path: '/', element: <Home /> }],
+        children: [
+          {
+            element: <LayoutApp />,
+            children: [{ path: '/', element: <Home /> }],
+          },
+        ],
       },
       { path: '*', element: <NaoEncontrado /> },
     ],
