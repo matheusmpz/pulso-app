@@ -110,7 +110,7 @@ export default function Login() {
               </p>
             </div>
 
-            <div aria-live="polite">
+            <div aria-live="polite" className="empty:hidden">
               {erroApi && (
                 <Alert variant="destructive">
                   <TriangleAlert />
