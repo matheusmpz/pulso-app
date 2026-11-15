@@ -11,8 +11,6 @@ interface GradeCardsProps {
   recarregando: boolean
   pendentes: ReadonlySet<string>
   aoTentarNovamente: (codigo: string) => void
-  /** Códigos realçados por atualização em tempo real */
-  realces?: ReadonlySet<string>
   mensagemSemResultado?: string
 }
 
@@ -24,7 +22,6 @@ export function GradeCards({
   recarregando,
   pendentes,
   aoTentarNovamente,
-  realces,
   mensagemSemResultado,
 }: GradeCardsProps) {
   const celulas = useMemo(() => montarLinhas(metas).flat(), [metas])
@@ -41,7 +38,6 @@ export function GradeCards({
             recarregando={recarregando}
             tentando={pendentes.has(card.codigo)}
             aoTentarNovamente={aoTentarNovamente}
-            realce={realces?.has(card.codigo)}
             mensagemSemResultado={mensagemSemResultado}
           />
         </div>

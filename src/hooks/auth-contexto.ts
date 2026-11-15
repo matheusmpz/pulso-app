@@ -10,6 +10,8 @@ export interface AuthContexto {
   carregandoUsuario: boolean
   entrar: (email: string, senha: string) => Promise<void>
   sair: () => void
+  /** Sessão expirada (ex.: WebSocket avisou): limpa tudo e volta ao login com aviso */
+  expirarSessao: () => void
 }
 
 export const ContextoAuth = createContext<AuthContexto | null>(null)

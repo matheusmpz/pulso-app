@@ -86,6 +86,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     encerrar('manual')
   }, [encerrar])
 
+  const expirarSessao = useCallback(() => encerrar('expirada'), [encerrar])
+
   const valor = useMemo(
     () => ({
       token: sessao?.token ?? null,
@@ -93,8 +95,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       carregandoUsuario: sessao !== null && consultaMe.isPending,
       entrar,
       sair,
+      expirarSessao,
     }),
-    [sessao, consultaMe.data, consultaMe.isPending, entrar, sair],
+    [sessao, consultaMe.data, consultaMe.isPending, entrar, sair, expirarSessao],
   )
 
   return <ContextoAuth.Provider value={valor}>{children}</ContextoAuth.Provider>

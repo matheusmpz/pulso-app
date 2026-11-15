@@ -7,6 +7,7 @@ import { CardRenderer } from '@/components/cards/CardRenderer'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Spinner } from '@/components/ui/spinner'
+import { useRealce } from '@/hooks/useRealce'
 import { badgeDoCard, cardVazio, semSprint, subtituloDoCard } from '@/lib/cards'
 import { cn } from '@/lib/utils'
 import type { CardMeta, CardResultado } from '@/types/api'
@@ -19,8 +20,6 @@ export interface CardShellProps {
   carregando: boolean
   /** Filtro mudou: dados antigos + spinner no cabeçalho */
   recarregando: boolean
-  /** Realce de atualização em tempo real */
-  realce?: boolean
   tentando?: boolean
   aoTentarNovamente?: (codigo: string) => void
   /** Mensagem quando não há resultado (ex.: filtro inválido) */
@@ -33,7 +32,6 @@ function CardShellBase({
   resultado,
   carregando,
   recarregando,
-  realce,
   tentando,
   aoTentarNovamente,
   mensagemSemResultado,
@@ -45,6 +43,7 @@ function CardShellBase({
   const badge = badgeDoCard(resultado)
   const alerta = resultado?.alerta ?? null
   const compacto = tipo === 'numero' || tipo === 'radial'
+  const realce = useRealce(meta.codigo)
 
   return (
     <Card

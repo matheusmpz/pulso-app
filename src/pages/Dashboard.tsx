@@ -3,6 +3,7 @@ import { RotateCcw, TriangleAlert } from 'lucide-react'
 import { useParams } from 'react-router'
 
 import { BarraFiltros } from '@/components/filtros/BarraFiltros'
+import { StatusAoVivo } from '@/components/dashboard/StatusAoVivo'
 import { GradeCards } from '@/components/dashboard/GradeCards'
 import { EstadoPagina } from '@/components/layout/EstadoPagina'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -13,6 +14,7 @@ import { useDashboard, useDashboardDados } from '@/hooks/useDashboard'
 import { useDashboards } from '@/hooks/useDashboards'
 import { useFiltros } from '@/hooks/useFiltros'
 import { useOpcoesFiltros } from '@/hooks/useOpcoesFiltros'
+import { useTempoReal } from '@/hooks/useTempoReal'
 import { ehApiError } from '@/lib/api'
 import { corDoDashboard } from '@/lib/cores'
 import { sprintPadrao } from '@/lib/periodos'
@@ -34,6 +36,8 @@ function PaginaDashboard({ chave }: { chave: string }) {
   const filtrosProntos = !(filtros.escopo === 'sprint' && !filtros.id)
   const dados = useDashboardDados(chave, filtros, meta.isSuccess && filtrosProntos)
   const { atualizar, pendentes } = useAtualizarCard(chave, filtros)
+  // Tempo real: mesma chave de filtros do REST; reassina quando os filtros mudam.
+  const tempoReal = useTempoReal(chave, filtros, meta.isSuccess && filtrosProntos)
 
   // URL com escopo=sprint sem id (link antigo ou digitado): pré-seleciona a sprint atual.
   useEffect(() => {
@@ -108,7 +112,9 @@ function PaginaDashboard({ chave }: { chave: string }) {
             </>
           )}
         </div>
-        <SlotCabecalho>{null}</SlotCabecalho>
+        <SlotCabecalho>
+          <StatusAoVivo estado={tempoReal} />
+        </SlotCabecalho>
       </div>
 
       <BarraFiltros chave={chave} filtros={filtros} aplicados={aplicados} aoAlterar={alterar} aoLimpar={limpar} />
